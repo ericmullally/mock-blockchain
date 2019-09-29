@@ -5,8 +5,42 @@ from blockchain import Blockchain
 
 app = Flask(__name__)
 wallet = Wallet()
-blockchain = Blockchain(wallet.public_key)
+blockchain = None
 CORS(app)
+
+
+@app.route("/wallet", methods=["POST"])
+def create_keys():
+    global blockchain
+    if wallet.create_keys():
+        response = {
+        "msg": "Account created", 
+        "key": wallet.public_key
+        }
+        blockchain=Blockchain(wallet.public_key)
+        return jsonify(response), 201
+    else:
+        response = {
+        "msg": "Account creation failed"
+        }
+        return jsonify(response), 500
+
+@app.route("/wallet", methods=["GET"])
+def load_keys():
+    global blockchain
+    if wallet.load_keys():
+        response = {
+        "msg": "Login Successful", 
+        "key": wallet.public_key
+        }
+        blockchain=Blockchain(wallet.public_key)
+        return jsonify(response), 200
+    else:
+        response = {
+        "msg": "Login failed"
+        }
+        return response, 500
+
 
 
 @app.route("/", methods=["GET"])

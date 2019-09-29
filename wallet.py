@@ -23,16 +23,23 @@ class Wallet:
                 f.write(public_key)
                 f.write("\n")
                 f.write(private_key)
+            return True
         except (IOError, IndexError):
             print("failed to store keys")
+            return False
 
     def load_keys(self):
+        if self.public_key != None or self.private_key != None:
+            print("already logged in")
+            return
         try:
             with open("key.txt", mode="r") as f:
                 keys = f.readlines()
                 self.public_key = keys[0][:-1]
                 self.private_key = keys[1]
+            return True
         except (IOError, IndexError):
+            return False
             print("failed to load keys")
 
     def generate_key(self):

@@ -144,9 +144,9 @@ class Blockchain:
     def mine_block(self):
 
         # mines a new block by adding all open transactions to the blockchain
+        
         if self.hosting_node == None:
             return False
-        print(self.hosting_node)
         last_block = self.__chain[-1]
         hashed_block = hashBlock(last_block)
         proof = self.proof_of_work()
